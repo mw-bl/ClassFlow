@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Disciplinas</title>
+  <script src="../scripts/disciplinas.js" defer></script>
+</head>
+<body>
+  <h1>Gerenciar Disciplinas</h1>
+  <button id="voltar">Voltar</button>
+  <h2>Suas Disciplinas</h2>
+  <ul id="listaDisciplinas"></ul>
+
+  <h2>Adicionar Nova Disciplina</h2>
+  <form id="formDisciplina">
+    <input type="text" id="nome" placeholder="Nome" required>
+    <input type="text" id="codigo" placeholder="Código" required>
+    <input type="number" id="cargaHoraria" placeholder="Carga Horária" required>
+    <textarea id="descricao" placeholder="Descrição"></textarea>
+    <button type="submit">Adicionar</button>
+  </form>
+</body>
+</html>
