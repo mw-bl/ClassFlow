@@ -34,7 +34,8 @@ router.post('/login', async (req, res) => {
     const senhaValida = await bcrypt.compare(senha, aluno.senha);
     if (!senhaValida) return res.status(401).json({ error: 'Credenciais inválidas!' });
 
-    const token = jwt.sign({ id: aluno.id }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: aluno.id }, SECRET_KEY, { expiresIn: '24h' }); // Expiração ajustada para 24 horas
+
     res.json({ token, message: 'Login bem-sucedido!' });
   } catch (error) {
     res.status(500).json({ error: 'Erro no login', detalhes: error.message });
@@ -43,8 +44,11 @@ router.post('/login', async (req, res) => {
 
 // Perfil do aluno autenticado
 router.get('/perfil', async (req, res) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.status(401).json({ error: 'Token não fornecido!' });
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'Token não fornecido!' });
+
+  const token = authHeader.split(' ')[1]; // Remove o prefixo 'Bearer'
+  if (!token) return res.status(401).json({ error: 'Token inválido ou ausente!' });
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
@@ -56,5 +60,7 @@ router.get('/perfil', async (req, res) => {
     res.status(401).json({ error: 'Token inválido ou expirado!' });
   }
 });
+
+
 
 module.exports = router;

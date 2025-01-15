@@ -22,43 +22,57 @@ const autenticar = async (req, res, next) => {
 
 // Cadastrar disciplina
 router.post('/', autenticar, async (req, res) => {
-  const { nome, codigo, carga_horaria, descricao, status } = req.body;
+  const { nome, codigo, cargaHoraria, descricao, status } = req.body;
+
+  console.log('Dados recebidos no servidor:', { nome, codigo, cargaHoraria, descricao, status });
+
+  if (!nome || !codigo || !cargaHoraria || !descricao) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios!' });
+  }
+
   try {
     const novaDisciplina = await Disciplina.create({
       nome,
       codigo,
-      carga_horaria,
+      cargaHoraria,
       descricao,
       status,
       aluno_id: req.alunoId,
     });
     res.status(201).json(novaDisciplina);
   } catch (error) {
-    res.status(400).json({ error: 'Erro ao cadastrar disciplina', detalhes: error.message });
+    console.error('Erro ao cadastrar disciplina:', error);
+    res.status(500).json({ error: 'Erro ao cadastrar disciplina', detalhes: error.message });
   }
 });
+
 
 // Listar disciplinas
 router.get('/', autenticar, async (req, res) => {
   try {
     const disciplinas = await Disciplina.findAll({ where: { aluno_id: req.alunoId } });
+    if (disciplinas.length === 0) {
+      return res.status(404).json({ message: 'Nenhuma disciplina encontrada.' });
+    }
     res.json(disciplinas);
   } catch (error) {
+    console.error('Erro ao buscar disciplinas:', error);
     res.status(500).json({ error: 'Erro ao buscar disciplinas', detalhes: error.message });
   }
 });
 
+
 // Editar disciplina
 router.put('/:id', autenticar, async (req, res) => {
   const { id } = req.params;
-  const { nome, codigo, carga_horaria, descricao, status } = req.body;
+  const { nome, codigo, cargaHoraria, descricao, status } = req.body;
   try {
     const disciplina = await Disciplina.findOne({ where: { id, aluno_id: req.alunoId } });
     if (!disciplina) return res.status(404).json({ error: 'Disciplina não encontrada!' });
 
     disciplina.nome = nome;
     disciplina.codigo = codigo;
-    disciplina.carga_horaria = carga_horaria;
+    disciplina.cargaHoraria = cargaHoraria;
     disciplina.descricao = descricao;
     disciplina.status = status;
     await disciplina.save();
