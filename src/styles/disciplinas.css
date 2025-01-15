@@ -1,0 +1,25 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#formCadastrarDisciplina {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin-top: 20px; /* Adjust as needed for spacing */
+  gap: 10px; /* Add spacing between form fields */
+}
+
+/* Add styles for logo and buttons if needed */
+.logo {
+  margin-bottom: 20px; /* Adjust as needed for spacing */
+}
+
+.buttons {
+  margin-top: 20px; /* Adjust as needed for spacing */
+  margin-bottom: 10px; /* Add spacing between buttons */
+}

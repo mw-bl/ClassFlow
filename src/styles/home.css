@@ -1,0 +1,27 @@
+/* Add your CSS styles for the home page here */
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#user-info, h1, button {
+  text-align: center;
+}
+
+button {
+  margin: 10px;
+  margin-bottom: 10px; /* Add spacing between buttons */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  gap: 10px; /* Add spacing between form fields */
+}

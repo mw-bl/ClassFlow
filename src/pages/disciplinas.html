@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerenciar Disciplinas</title>
   <script src="../scripts/disciplinas.js" defer></script>
+  <link rel="stylesheet" href="../styles/disciplinas.css">
 </head>
 <body>
   <h1>Gerenciar Disciplinas</h1>
@@ -14,17 +15,19 @@
   <ul id="listaDisciplinas"></ul>
 
   <h2>Adicionar ou Editar Disciplina</h2>
-  <form id="formCadastrarDisciplina">
-    <input type="hidden" id="disciplinaId">
-    <input type="text" id="nomeDisciplina" placeholder="Nome" required>
-    <input type="text" id="codigoDisciplina" placeholder="Código" required>
-    <input type="number" id="cargaHorariaDisciplina" placeholder="Carga Horária" required>
-    <textarea id="descricaoDisciplina" placeholder="Descrição"></textarea>
-    <select id="statusDisciplina" required>
-      <option value="Pendente">Pendente</option>
-      <option value="Concluída">Concluída</option>
-    </select>
-    <button type="submit">Salvar</button>
-  </form>
+  <div class="form-container">
+    <form id="formCadastrarDisciplina">
+      <input type="hidden" id="disciplinaId">
+      <input type="text" id="nomeDisciplina" placeholder="Nome" required>
+      <input type="text" id="codigoDisciplina" placeholder="Código" required>
+      <input type="number" id="cargaHorariaDisciplina" placeholder="Carga Horária" required>
+      <textarea id="descricaoDisciplina" placeholder="Descrição"></textarea>
+      <select id="statusDisciplina" required>
+        <option value="Pendente">Pendente</option>
+        <option value="Concluída">Concluída</option>
+      </select>
+      <button type="submit">Salvar</button>
+    </form>
+  </div>
 </body>
 </html>
