@@ -1,6 +1,6 @@
-CREATE DATABASE planner;
+CREATE DATABASE classflow;
 
-USE planner;
+USE classflow;
 
 CREATE TABLE alunos (
     id INT AUTO_INCREMENT PRIMARY KEY,
