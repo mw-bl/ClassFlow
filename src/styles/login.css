@@ -1,25 +1,71 @@
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
   font-family: Arial, sans-serif;
-}
+  padding: 20px;
 
-form {
+  /* Configura o Flexbox para centralizar */
   display: flex;
-  flex-direction: column;
-  width: 300px;
-  gap: 10px; /* Add spacing between form fields */
+  flex-direction: column;  /* Organiza os botões verticalmente */
+  justify-content: center;  /* Centraliza os itens verticalmente */
+  align-items: center;  /* Centraliza os itens horizontalmente */
+  height: 100vh;  /* Garante que o body ocupe toda a altura da tela */
 }
 
-h1, form, p {
-  text-align: center;
+#logo {
+  width: 600px;  /* Ajuste o tamanho conforme necessário */
+  height: auto;
+  display: block;
+  margin: 0 auto;  /* Centraliza a imagem */
 }
 
-button {
-  margin-top: 10px;
-  margin-bottom: 10px; /* Add spacing between buttons */
+.button-login {
+  margin: 10px 0;  /* Espaçamento entre os botões */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 400px; 
+  height: 60px;/* Largura fixa para os botões */
+  display: block; /* Garante que os botões fiquem em linhas separadas */
+  background-color: #546FFF;
+  border-radius: 10px;
+  
+}
+
+.button-register {
+  margin: 10px 0;  /* Espaçamento entre os botões */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 400px; 
+  height: 60px; /* Largura fixa para os botões */
+  display: block; /* Garante que os botões fiquem em linhas separadas */
+  background-color: none;
+  border-radius: 10px;
+  
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 400px;
+}
+
+.close {
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
 }

@@ -7,13 +7,39 @@
   <link rel="stylesheet" href="../styles/login.css">
 </head>
 <body>
-  <h1>Login</h1>
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="E-mail" required>
-    <input type="password" id="password" placeholder="Senha" required>
-    <button type="submit">Entrar</button>
-  </form>
-  <p>Não tem conta? <a href="register.html">Cadastre-se</a></p>
+  <!-- Substituir h1 por imagem -->
+  <img src="../assets/Logo-ClassFlow.png" alt="ClassFlow" id="logo" />
+  <p> Uma ferramenta feita por<br> estudantes para estudantes.</p>
+
+  <button class="button-login" id="openLoginModal">Entre</button>
+  <p>ou</p>
+  <button class="button-register" id="openRegisterModal">Cadastre-se</button>
+
+  <!-- Modal de Login -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeLoginModal">&times;</span>
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="E-mail" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Cadastro -->
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeRegisterModal">&times;</span>
+      <form id="registerForm">
+        <input type="text" id="username" placeholder="Nome" required>
+        <input type="email" id="registerEmail" placeholder="E-mail" required>
+        <input type="password" id="registerPassword" placeholder="Senha" required>
+        <button type="submit">Cadastrar</button>
+      </form>
+    </div>
+  </div>
+
   <script src="../scripts/login.js"></script>
 </body>
 </html>
