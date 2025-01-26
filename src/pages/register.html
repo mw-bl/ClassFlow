@@ -3,20 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
+  <title>Cadastro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kufam:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/register.css">
 </head>
 <body>
-  <h1>Registro</h1>
-  <form id="registerForm">
-    <input type="text" id="nome" placeholder="Nome Completo" required>
-    <input type="text" id="matricula" placeholder="Matrícula" required>
-    <input type="email" id="registerEmail" placeholder="E-mail" required>
-    <input type="password" id="registerPassword" placeholder="Senha" required>
-    <input type="text" id="curso" placeholder="Curso" required>
-    <button type="submit">Registrar</button>
-  </form>
-  <p>Já tem conta? <a href="login.html">Login</a></p>
+  <img src="../assets/Logo-ClassFlow.png" alt="ClassFlow" id="logo" />
+  <p>Uma ferramenta feita por<br> estudantes para estudantes.</p>
+
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeRegisterModal">&times;</span>
+      <h1 class="title-h1">Cadastre-se</h1>
+      <p>Crie sua conta pra acessar o sistema</p>
+      <form id="registerForm">
+        <input type="text" id="username" placeholder="Nome Completo" required>
+        <input type="text" id="matricula" placeholder="Matrícula" required>
+        <input type="email" id="registerEmail" placeholder="E-mail" required>
+        <input type="password" id="registerPassword" placeholder="Senha" required>
+        <input type="text" id="curso" placeholder="Curso" required>
+        <button type="submit">Cadastrar</button>
+        <p id="errorMessage" style="color: red; display: none;">Todos os campos devem ser preenchidos.</p>
+      </form>
+      <p>Já tem uma conta? 
+        <a href="login.html" onclick="localStorage.setItem('openLoginModal', true)">Entrar</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Script para redirecionar para a página de login ao clicar no "X"
+    document.getElementById('closeRegisterModal').addEventListener('click', function() {
+      window.location.href = 'login.html'; // Redireciona para a página de login
+    });
+  </script>
+
   <script src="../scripts/register.js"></script>
 </body>
 </html>

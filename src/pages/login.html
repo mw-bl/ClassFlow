@@ -4,39 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kufam:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/login.css">
 </head>
 <body>
-  <!-- Substituir h1 por imagem -->
   <img src="../assets/Logo-ClassFlow.png" alt="ClassFlow" id="logo" />
-  <p> Uma ferramenta feita por<br> estudantes para estudantes.</p>
+  <p>Uma ferramenta feita por<br> estudantes para estudantes.</p>
 
   <button class="button-login" id="openLoginModal">Entre</button>
   <p>ou</p>
-  <button class="button-register" id="openRegisterModal">Cadastre-se</button>
+  <a href="register.html">
+    <button class="button-register">Cadastre-se</button>
+  </a>
 
   <!-- Modal de Login -->
   <div id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close" id="closeLoginModal">&times;</span>
+      <h1>Entrar</h1>
+      <p>Acesse o sistema com sua conta</p>
       <form id="loginForm">
         <input type="email" id="email" placeholder="E-mail" required>
         <input type="password" id="password" placeholder="Senha" required>
         <button type="submit">Entrar</button>
       </form>
-    </div>
-  </div>
-
-  <!-- Modal de Cadastro -->
-  <div id="registerModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeRegisterModal">&times;</span>
-      <form id="registerForm">
-        <input type="text" id="username" placeholder="Nome" required>
-        <input type="email" id="registerEmail" placeholder="E-mail" required>
-        <input type="password" id="registerPassword" placeholder="Senha" required>
-        <button type="submit">Cadastrar</button>
-      </form>
+      <p>Não tem uma conta? <a href="register.html" id="openRegisterModal">Cadastre-se</a></p> <!-- Link para o modal de cadastro -->
     </div>
   </div>
 
