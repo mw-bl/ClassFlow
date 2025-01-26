@@ -36,8 +36,29 @@ window.onload = function () {
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  // Limpa as mensagens de erro anteriores
+  document.getElementById('emailError').textContent = '';
+  document.getElementById('passwordError').textContent = '';
+
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
+
+  let formIsValid = true;
+
+  // Verifica se o email está vazio
+  if (!email) {
+    document.getElementById('emailError').textContent = 'Preencha todos os campos.';
+    formIsValid = false;
+  }
+
+  // Verifica se a senha está vazia
+  if (!password) {
+    document.getElementById('passwordError').textContent = 'Preencha todos os campos.';
+    formIsValid = false;
+  }
+
+  // Se o formulário não for válido, não envia a requisição
+  if (!formIsValid) return;
 
   try {
     const response = await fetch('http://localhost:3000/api/alunos/login', {

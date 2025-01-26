@@ -1,27 +1,157 @@
-/* Add your CSS styles for the home page here */
-
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+/* Estilos globais */
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-#user-info, h1, button {
+/* Corpo da página */
+body {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+/* Menu lateral */
+#sidebar {
+  width: 250px;
+  background-color: white;
+  color: #8E92BC;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Logo do sistema */
+#logo-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#logo {
+  width: 150px;
+  height: auto;
+}
+
+/* Menu de navegação */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 15px 0;
+}
+
+nav ul li a {
+  color: #8E92BC;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #444;
+}
+
+/* Conteúdo principal */
+#main-content {
+  margin-left: 250px;
+  padding: 20px;
+  width: 100%;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+/* Título da página */
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+/* Informações do usuário */
+#user-info {
+  margin-bottom: 20px;
   text-align: center;
 }
 
 button {
-  margin: 10px;
-  margin-bottom: 10px; /* Add spacing between buttons */
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #0C1E33;
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #546FFF;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 form {
   display: flex;
   flex-direction: column;
   width: 300px;
-  gap: 10px; /* Add spacing between form fields */
+  gap: 15px; /* Adiciona espaçamento entre os campos do formulário */
+  margin: 0 auto;
+}
+
+/* Estilos para inputs do formulário */
+input[type="text"], input[type="email"], input[type="password"], select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus {
+  border-color: #546FFF;
+  outline: none;
+}
+
+label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  #sidebar {
+    width: 200px;
+  }
+
+  #main-content {
+    margin-left: 200px;
+  }
+
+  #logo {
+    width: 100px;
+  }
+
+  nav ul li a {
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
+  }
 }
