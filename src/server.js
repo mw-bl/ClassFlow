@@ -3,7 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 const Aluno = require('./models/aluno');
-const Disciplina = require('./models/disciplina');
+const Disciplinas = require('./models/disciplina');
 
 const sequelize = require('./config/database');
 

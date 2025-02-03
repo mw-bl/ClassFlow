@@ -1,108 +1,132 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const token = localStorage.getItem('token');
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem("token");
+
   if (!token) {
-    console.error('Token não encontrado. Redirecionando para a página de login.');
-    window.location.href = './login.html';
+    alert("Você precisa fazer login.");
+    window.location.href = "./login.html";
     return;
   }
 
-  const listaDisciplinas = document.getElementById('listaDisciplinas');
+  // Obter informações do aluno
+  try {
+    const response = await fetch("http://localhost:3000/api/alunos/perfil", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-  // Carregar disciplinas
-  async function carregarDisciplinas() {
-    listaDisciplinas.innerHTML = '';
-    try {
-      const response = await fetch('http://localhost:3000/api/disciplinas', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
-      console.log('Resposta da API (listar disciplinas):', response);
-  
-      if (!response.ok) {
-        const error = await response.json();
-        console.error('Erro ao carregar disciplinas:', error);
-        throw new Error(error.error || 'Erro ao carregar disciplinas.');
-      }
-  
-      const disciplinas = await response.json();
-      console.log('Disciplinas carregadas:', disciplinas);
-  
-      disciplinas.forEach((disciplina) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>${disciplina.nome}</strong> (${disciplina.codigo}) - ${disciplina.cargaHoraria} horas
-          <button data-id="${disciplina.id}" class="editar">Editar</button>
-          <button data-id="${disciplina.id}" class="excluir">Excluir</button>
-        `;
-        listaDisciplinas.appendChild(li);
-      });
-    } catch (error) {
-      console.error('Erro ao carregar disciplinas:', error);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error("Erro ao carregar informações do aluno.");
     }
+
+    const aluno = await response.json();
+
+    const mainContent = document.getElementById("main-content");
+    mainContent.innerHTML = `
+      <h1>Oi, ${aluno.nome}!</h1>
+      <p>Vamos gerenciar a sua vida acadêmica?</p>
+    `;
+  } catch (error) {
+    console.error("Erro ao carregar informações:", error);
+    alert("Erro ao carregar informações. Faça login novamente.");
+    localStorage.removeItem("token");
+    window.location.href = "./login.html";
   }
 
-  await carregarDisciplinas();
+  const modal = document.getElementById("modal");
+  const btnAbrirModal = document.getElementById("btnAbrirModal");
+  const btnFecharModal = document.querySelector(".close");
+  const formDisciplina = document.getElementById("formDisciplina");
+  const listaDisciplinas = document.getElementById("listaDisciplinas");
+  const filtroStatus = document.getElementById("filtro");
 
-  // Adicionar evento para cadastrar nova disciplina
-  document.getElementById('formCadastrarDisciplina').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const nome = document.getElementById('nomeDisciplina').value;
-    const codigo = document.getElementById('codigoDisciplina').value;
-    const cargaHoraria = document.getElementById('cargaHorariaDisciplina').value;
-    const descricao = document.getElementById('descricaoDisciplina').value;
-    const status = document.getElementById('statusDisciplina').value;
+  // Abrir Modal
+  btnAbrirModal.addEventListener("click", () => {
+    modal.style.display = "block";
+  });
 
-    console.log('Dados do formulário:', { nome, codigo, cargaHoraria, descricao, status });
+  // Fechar Modal
+  btnFecharModal.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
 
-    try {
-      const response = await fetch('http://localhost:3000/api/disciplinas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ nome, codigo, cargaHoraria, descricao, status }),
-      });
-  
-      console.log('Resposta da API (adicionar disciplina):', response);
-  
-      if (!response.ok) {
-        const error = await response.json();
-        console.error('Erro ao adicionar disciplina:', error);
-        throw new Error(error.error || 'Erro ao adicionar disciplina.');
-      }
-  
-      const novaDisciplina = await response.json();
-      console.log('Disciplina cadastrada:', novaDisciplina);
-  
-      // Recarregar a lista de disciplinas
-      await carregarDisciplinas();
-    } catch (error) {
-      console.error('Erro ao adicionar disciplina:', error);
-      alert('Erro ao adicionar disciplina.');
+  // Fechar modal ao clicar fora
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
     }
   });
 
-  // Excluir disciplina
-  async function excluirDisciplina(id) {
-    try {
-      const response = await fetch(`http://localhost:3000/api/disciplinas/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) throw new Error('Erro ao excluir disciplina.');
-      await carregarDisciplinas();
-    } catch (error) {
-      console.error(error);
-      alert('Erro ao excluir disciplina.');
-    }
-  }
+  // Adicionar nova disciplina
+  formDisciplina.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  // Adicionar eventos aos botões de excluir
-  listaDisciplinas.addEventListener('click', async (event) => {
-    if (event.target.classList.contains('excluir')) {
-      const id = event.target.getAttribute('data-id');
-      await excluirDisciplina(id);
+    const nomeDisciplina = document.getElementById("nome").value.trim();
+    const codigoDisciplina = document.getElementById("codigo").value.trim();
+    const cargaHorariaDisciplina = document.getElementById("cargaHoraria").value.trim();
+    const descricaoDisciplina = document.getElementById("descricao").value.trim();
+    const statusDisciplina = document.getElementById("status").value;
+
+    if (nomeDisciplina && codigoDisciplina && cargaHorariaDisciplina && descricaoDisciplina) {
+      try {
+        const response = await fetch("http://localhost:3000/api/disciplinas/cadastrar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Envia o token JWT no cabeçalho
+          },
+          body: JSON.stringify({
+            nome: nomeDisciplina,
+            codigo: codigoDisciplina,
+            cargaHoraria: cargaHorariaDisciplina,
+            descricao: descricaoDisciplina,
+            status: statusDisciplina,
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || "Erro ao cadastrar disciplina.");
+        }
+
+        const novaDisciplina = await response.json();
+        console.log("Disciplina cadastrada:", novaDisciplina);
+
+        // Atualizar lista de disciplinas no front-end
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${nomeDisciplina}</span> - <em>${statusDisciplina}</em>
+        `;
+        listaDisciplinas.appendChild(li);
+
+        // Limpar formulário
+        document.getElementById("nome").value = "";
+        document.getElementById("codigo").value = "";
+        document.getElementById("cargaHoraria").value = "";
+        document.getElementById("descricao").value = "";
+        document.getElementById("status").value = "andamento";
+        modal.style.display = "none";
+
+      } catch (error) {
+        console.error("Erro ao cadastrar disciplina:", error);
+        alert("Erro ao cadastrar disciplina.");
+      }
+    } else {
+      alert("Todos os campos são obrigatórios!");
     }
+  });
+
+  // Filtro por status
+  filtroStatus.addEventListener("change", () => {
+    const status = filtroStatus.value;
+    const todasDisciplinas = listaDisciplinas.querySelectorAll("li");
+
+    todasDisciplinas.forEach((disciplina) => {
+      const statusDisciplina = disciplina.querySelector("em").textContent.toLowerCase();
+      if (status === "todos" || status === statusDisciplina) {
+        disciplina.style.display = "block";
+      } else {
+        disciplina.style.display = "none";
+      }
+    });
   });
 });

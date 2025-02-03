@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
-  console.log('Token carregado do LocalStorage:', token); // Log para verificar o token
+  console.log('Token carregado do LocalStorage:', token);
 
   if (!token) {
     alert('Você precisa fazer login.');
@@ -23,31 +23,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const aluno = await response.json();
-    console.log('Dados do aluno:', aluno); // Log para verificar os dados recebidos
+    console.log('Dados do aluno:', aluno);
 
-    const userInfoDiv = document.getElementById('user-info');
-    userInfoDiv.innerHTML = `
-      <p>Nome: ${aluno.nome}</p>
-      <p>Matrícula: ${aluno.matricula}</p>
-      <p>Curso: ${aluno.curso}</p>
+    // Atualizar o título com o nome do aluno (sem os botões)
+    const mainContent = document.getElementById('main-content');
+    mainContent.innerHTML = `
+      <h1>Oi, ${aluno.nome}!</h1>
+      <p>Vamos gerenciar a sua vida acadêmica?</p>
+      <img src="../assets/fotoDeFundo.png" alt="Imagem de exemplo" id="imagem-principal">
+      <h2> Acompanhe seu semestre 
+      <p> Relatório Semanal </p>
+      </h2>
+      
     `;
+
+    // Se você quiser adicionar mais lógica sem os botões, pode incluir aqui.
+    // Por exemplo, carregar dados adicionais ou exibir outro conteúdo.
+
   } catch (error) {
     console.error('Erro ao carregar informações:', error);
     alert('Erro ao carregar informações. Faça login novamente.');
     localStorage.removeItem('token');
     window.location.href = './login.html';
   }
-});
-
-// Botão para gerenciar disciplinas
-document.getElementById('gerenciarDisciplinas').addEventListener('click', () => {
-  console.log('Redirecionando para gerenciar disciplinas...');
-  window.location.href = './disciplinas.html';
-});
-
-// Botão de logout
-document.getElementById('logout').addEventListener('click', () => {
-  console.log('Logout realizado. Redirecionando para login...');
-  localStorage.removeItem('token');
-  window.location.href = './login.html';
 });

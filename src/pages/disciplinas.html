@@ -1,33 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerenciar Disciplinas</title>
-  <script src="../scripts/disciplinas.js" defer></script>
-  <link rel="stylesheet" href="../styles/disciplinas.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disciplinas</title>
+    <script src="../scripts/loadMenu.js" defer></script>
+    <link rel="stylesheet" href="../styles/disciplinas.css">
 </head>
 <body>
-  <h1>Gerenciar Disciplinas</h1>
-  <button id="voltar">Voltar</button>
+    <div id="sidebar-container"></div>
+    <header id="main-content">
+        <h1>Carregando...</h1>
+    </header>
 
-  <h2>Lista de Disciplinas</h2>
-  <ul id="listaDisciplinas"></ul>
+    <main>
+        <div id="disciplinasContainer">
+            <h2>Disciplinas </h2>
+            <!-- Botão e filtro movidos para dentro desta div -->
+            <div class="disciplinas-header">
+                <button id="btnAbrirModal">+ Cadastrar Disciplina</button>
+                <div class="filtro-container">
+                    <div class="filtro-com-icone" onclick="abrirSelect()">
+                      <img src="../assets/icons/sort.png" alt="Ícone de ordenação" class="filtro-icone"> <!-- Imagem à esquerda -->
+                      <span class="filtro-texto">Ordenar por:</span> <!-- Texto personalizado -->
+                      <select id="filtro">
+                        
+                        <option value="andamento">Em andamento</option>
+                        <option value="concluida">Concluída</option>
+                        <option value="pendente">Pendente</option>
+                      </select>
+                    </div>
+                  </div>
+            </div>
+            <ul id="listaDisciplinas"></ul>
+        </div>
+    </main>
 
-  <h2>Adicionar ou Editar Disciplina</h2>
-  <div class="form-container">
-    <form id="formCadastrarDisciplina">
-      <input type="hidden" id="disciplinaId">
-      <input type="text" id="nomeDisciplina" placeholder="Nome" required>
-      <input type="text" id="codigoDisciplina" placeholder="Código" required>
-      <input type="number" id="cargaHorariaDisciplina" placeholder="Carga Horária" required>
-      <textarea id="descricaoDisciplina" placeholder="Descrição"></textarea>
-      <select id="statusDisciplina" required>
-        <option value="Pendente">Pendente</option>
-        <option value="Concluída">Concluída</option>
-      </select>
-      <button type="submit">Salvar</button>
-    </form>
-  </div>
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Cadastrar Nova Disciplina</h2>
+            <form id="formDisciplina">
+                <label for="nome">Nome da Disciplina:</label>
+                <input type="text" id="nome" required>
+
+                <label for="codigo">Código:</label>
+                <input type="text" id="codigo" required>
+
+                <label for="cargaHoraria">Carga Horária:</label>
+                <input type="text" id="cargaHoraria" required>
+
+                <label for="descricao">Descrição:</label>
+                <input type="text" id="descricao" required>
+
+                <label for="status">Status:</label>
+                <select id="status">
+                    <option value="andamento">Em andamento</option>
+                    <option value="concluida">Concluída</option>
+                    <option value="pendente">Pendente</option>
+                </select>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+    <script src="../scripts/disciplinas.js" defer></script>
 </body>
 </html>

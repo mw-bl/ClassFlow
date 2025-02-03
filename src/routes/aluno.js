@@ -61,6 +61,44 @@ router.get('/perfil', async (req, res) => {
   }
 });
 
+// Editar informações do aluno
+router.put('/editar', async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'Token não fornecido!' });
+
+  const token = authHeader.split(' ')[1]; // Remove o prefixo 'Bearer'
+  if (!token) return res.status(401).json({ error: 'Token inválido ou ausente!' });
+
+  const { nome, matricula, email, senha, curso } = req.body;
+
+  try {
+    // Verificar o token e pegar o ID do aluno
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const aluno = await Aluno.findByPk(decoded.id);
+
+    if (!aluno) return res.status(404).json({ error: 'Aluno não encontrado!' });
+
+    // Atualizar as informações
+    const updateData = {};
+
+    if (nome) updateData.nome = nome;
+    if (matricula) updateData.matricula = matricula;
+    if (email) updateData.email = email;
+    if (curso) updateData.curso = curso;
+
+    // Verificar se a senha foi fornecida e atualizar se necessário
+    if (senha) {
+      const hashedPassword = await bcrypt.hash(senha, 10);
+      updateData.senha = hashedPassword;
+    }
+
+    await aluno.update(updateData);
+
+    res.json({ message: 'Informações do aluno atualizadas com sucesso!' });
+  } catch (error) {
+    res.status(401).json({ error: 'Token inválido ou expirado!', detalhes: error.message });
+  }
+});
 
 
 module.exports = router;

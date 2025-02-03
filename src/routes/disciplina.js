@@ -1,56 +1,50 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const Disciplina = require('../models/disciplina');
-const Aluno = require('../models/aluno');
+const Disciplinas = require('../models/disciplinas');
+ // Importação correta
+const Aluno  = require('../models/aluno');
+
 
 const router = express.Router();
-const SECRET_KEY = process.env.JWT_SECRET || 'chave_secreta';
-
-// Middleware para autenticação
-const autenticar = async (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.status(401).json({ error: 'Token não fornecido!' });
-
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    req.alunoId = decoded.id;
-    next();
-  } catch (error) {
-    res.status(401).json({ error: 'Token inválido ou expirado!' });
-  }
-};
 
 // Cadastrar disciplina
-router.post('/', autenticar, async (req, res) => {
-  const { nome, codigo, cargaHoraria, descricao, status } = req.body;
-
-  console.log('Dados recebidos no servidor:', { nome, codigo, cargaHoraria, descricao, status });
-
-  if (!nome || !codigo || !cargaHoraria || !descricao) {
-    return res.status(400).json({ error: 'Todos os campos são obrigatórios!' });
-  }
-
+router.post('/cadastrar', async (req, res) => {
   try {
+    const { nome, codigo, cargaHoraria, descricao, status, alunoId } = req.body;
+
+    // Verifica se aluno_id foi enviado
+    if (!alunoId) {
+      return res.status(400).json({ error: "O campo aluno_id é obrigatório." });
+    }
+
+    // Verifica se o aluno existe no banco
+    const alunoExiste = await Aluno.findByPk(alunoId);
+    if (!alunoExiste) {
+      return res.status(400).json({ error: "Aluno não encontrado." });
+    }
+
+    // Cadastrar disciplina
     const novaDisciplina = await Disciplina.create({
       nome,
       codigo,
       cargaHoraria,
       descricao,
       status,
-      aluno_id: req.alunoId,
+      alunoId,
     });
+
     res.status(201).json(novaDisciplina);
   } catch (error) {
-    console.error('Erro ao cadastrar disciplina:', error);
-    res.status(500).json({ error: 'Erro ao cadastrar disciplina', detalhes: error.message });
+    console.error("Erro ao cadastrar disciplina:", error);
+    res.status(500).json({ error: "Erro interno do servidor", detalhes: error.message });
   }
 });
 
 
+
 // Listar disciplinas
-router.get('/', autenticar, async (req, res) => {
+router.get('/listar',  async (req, res) => {
   try {
-    const disciplinas = await Disciplina.findAll({ where: { aluno_id: req.alunoId } });
+    const disciplinas = await Disciplina.findAll({ where: { aluno_id: req.alunoId } }); // Corrigido: Disciplina.findAll
     if (disciplinas.length === 0) {
       return res.status(404).json({ message: 'Nenhuma disciplina encontrada.' });
     }
@@ -61,13 +55,12 @@ router.get('/', autenticar, async (req, res) => {
   }
 });
 
-
 // Editar disciplina
-router.put('/:id', autenticar, async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, codigo, cargaHoraria, descricao, status } = req.body;
   try {
-    const disciplina = await Disciplina.findOne({ where: { id, aluno_id: req.alunoId } });
+    const disciplina = await Disciplina.findOne({ where: { id, aluno_id: req.alunoId } }); // Corrigido: Disciplina.findOne
     if (!disciplina) return res.status(404).json({ error: 'Disciplina não encontrada!' });
 
     disciplina.nome = nome;
@@ -84,10 +77,10 @@ router.put('/:id', autenticar, async (req, res) => {
 });
 
 // Excluir disciplina
-router.delete('/:id', autenticar, async (req, res) => {
+router.delete('/:id',  async (req, res) => {
   const { id } = req.params;
   try {
-    const disciplina = await Disciplina.findOne({ where: { id, aluno_id: req.alunoId } });
+    const disciplina = await Disciplina.findOne({ where: { id, aluno_id: req.alunoId } }); // Corrigido: Disciplina.findOne
     if (!disciplina) return res.status(404).json({ error: 'Disciplina não encontrada!' });
 
     await disciplina.destroy();
