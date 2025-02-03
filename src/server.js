@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 
 const Aluno = require('./models/aluno');
 const Disciplinas = require('./models/disciplina');
+const Projeto = require('./models/projeto');
 
 const sequelize = require('./config/database');
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Rotas
 app.use('/api/alunos', require('./routes/aluno'));
 app.use('/api/disciplinas', require('./routes/disciplina'));
+app.use('/api/projetos', require('./routes/projeto'));
 
 // Servidor
 const PORT = process.env.PORT || 3000;
