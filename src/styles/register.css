@@ -1,74 +1,84 @@
 body {
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
   padding: 20px;
-
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Garante que o conteúdo fique empilhado (logo em cima, texto embaixo) */
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: #f5f5f5;
+  text-align: center; /* Centraliza o texto */
 }
 
 #logo {
   width: 600px;
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin-bottom: 20px; /* Espaço entre a logo e o texto */
 }
 
-.modal {
-  display: none;
+.modal,
+.cadastro-modal {
+  display: none; /* Inicialmente oculto */
+  justify-content: center;
+  align-items: center;
   position: fixed;
-  z-index: 1;
+  z-index: 10;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-content {
+.modal-content,
+.cadastro-content {
   background-color: white;
-  margin: 15% auto;
   padding: 20px;
-  width: 80%;
+  width: 90%;
   max-width: 400px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  z-index: 11;
 }
 
-.modal-content h1 {
-  font-family: 'Roboto', Arial, sans-serif;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 50px;
+.modal-content h1,
+.cadastro-content h1 {
+  font-family: 'Poppins', Arial, sans-serif;
+  font-size: 24px;
   font-weight: bold;
   color: #333;
 }
 
-.modal-content p {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 16px;
+.modal-content p,
+.cadastro-content p {
+  font-size: 18px;
   color: #333;
+  font-weight: 500;
 }
 
 form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 50px;
+  margin-top: 20px;
 }
 
 form input,
 form select,
 form button {
-  padding: 10px;
+  padding: 12px;
   font-size: 16px;
   border: 1px solid #000000;
   border-radius: 5px;
-  
+  background: white;
+}
+
+form input:focus,
+form select:focus {
+  outline: 2px solid #0C1E33;
 }
 
 form button {
@@ -77,17 +87,40 @@ form button {
   cursor: pointer;
   transition: background-color 0.3s;
   border-radius: 15px;
-  margin-bottom: -30px;
-  
 }
 
 form button:hover {
-  background-color: #0C1E33;
+  background-color: #142d4c;
 }
 
 .close {
-  float: right;
+  position: absolute;
+  top: 10px;
+  right: 15px;
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.success-modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  width: 90%;
+  max-width: 350px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+}
+
+.success-text {
+  font-size: 22px;
+  font-weight: bold;
+  color: #0C1E33;
+  margin-bottom: 15px;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
 }

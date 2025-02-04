@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kufam:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kufam:wght@400..900&family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/register.css">
 </head>
 <body>
-  <img src="../assets/Logo-ClassFlow.png" alt="ClassFlow" id="logo" />
+  <img src="../assets/Logo-ClassFlow.png" alt="ClassFlow" id="logo">
   <p>Uma ferramenta feita por<br> estudantes para estudantes.</p>
 
+  <!-- Modal de Cadastro -->
   <div id="registerModal" class="modal">
     <div class="modal-content">
       <span class="close" id="closeRegisterModal">&times;</span>
       <h1 class="title-h1">Cadastre-se</h1>
-      <p>Crie sua conta pra acessar o sistema</p>
+      <p>Crie sua conta para acessar o sistema</p>
       <form id="registerForm">
         <input type="text" id="username" placeholder="Nome Completo" required>
         <input type="text" id="matricula" placeholder="Matrícula" required>
@@ -33,12 +34,13 @@
     </div>
   </div>
 
-  <script>
-    // Script para redirecionar para a página de login ao clicar no "X"
-    document.getElementById('closeRegisterModal').addEventListener('click', function() {
-      window.location.href = 'login.html'; // Redireciona para a página de login
-    });
-  </script>
+  <!-- Modal de Sucesso -->
+  <div id="successModal" class="modal">
+    <div class="modal-content success-modal-content">
+      <p class="success-text">ALUNO REGISTRADO COM SUCESSO!</p>
+      <img src="../assets/icons/Check circle.png" alt="Sucesso" class="success-icon">
+    </div>
+  </div>
 
   <script src="../scripts/register.js"></script>
 </body>
