@@ -9,7 +9,7 @@ CREATE TABLE alunos (
     dataNascimento DATE NOT NULL,
     curso VARCHAR(255) NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    foto BLOB NOT NULL
+    foto VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE disciplinas (
