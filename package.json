@@ -6,7 +6,7 @@
   "scripts": {
     "start:server": "node src/server.js",
     "start:electron": "electron .",
-    "start": "concurrently \"npm run start:server\" \"npm run start:electron\""  
+    "start": "concurrently \"npm run start:server\" \"npm run start:electron\""
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
+    "electron-reload": "^2.0.0-alpha.1",
     "wait-on": "^8.0.1"
   }
 }
