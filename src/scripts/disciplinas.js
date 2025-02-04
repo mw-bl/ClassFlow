@@ -7,37 +7,63 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Obter informações do aluno
-  try {
-    const response = await fetch("http://localhost:3000/api/alunos/perfil", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error("Erro ao carregar informações do aluno.");
-    }
-
-    const aluno = await response.json();
-
-    const mainContent = document.getElementById("main-content");
-    mainContent.innerHTML = `
-      <h1>Oi, ${aluno.nome}!</h1>
-      <p>Vamos gerenciar a sua vida acadêmica?</p>
-    `;
-  } catch (error) {
-    console.error("Erro ao carregar informações:", error);
-    alert("Erro ao carregar informações. Faça login novamente.");
-    localStorage.removeItem("token");
-    window.location.href = "./login.html";
-  }
-
+  const mainContent = document.getElementById("main-content");
   const modal = document.getElementById("modal");
   const btnAbrirModal = document.getElementById("btnAbrirModal");
   const btnFecharModal = document.querySelector(".close");
   const formDisciplina = document.getElementById("formDisciplina");
   const listaDisciplinas = document.getElementById("listaDisciplinas");
   const filtroStatus = document.getElementById("filtro");
+
+  // Buscar informações do aluno
+  async function carregarPerfil() {
+    try {
+      const response = await fetch("http://localhost:3000/api/alunos/perfil", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar informações do aluno.");
+      }
+
+      const aluno = await response.json();
+      mainContent.innerHTML = `
+        <h1>Oi, ${aluno.nome}!</h1>
+        <p>Vamos gerenciar a sua vida acadêmica?</p>
+      `;
+    } catch (error) {
+      console.error("Erro ao carregar informações:", error);
+      alert("Erro ao carregar informações. Faça login novamente.");
+      localStorage.removeItem("token");
+      window.location.href = "./login.html";
+    }
+  }
+
+  // Função para carregar disciplinas do banco
+  async function carregarDisciplinas() {
+    try {
+      const response = await fetch("http://localhost:3000/api/disciplinas/listar", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar disciplinas.");
+      }
+
+      const disciplinas = await response.json();
+      listaDisciplinas.innerHTML = ""; // Limpa a lista antes de adicionar
+
+      disciplinas.forEach((disciplina) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${disciplina.nome} (${disciplina.codigo})</span> - <em>${disciplina.status}</em>
+        `;
+        listaDisciplinas.appendChild(li);
+      });
+    } catch (error) {
+      console.error("Erro ao carregar disciplinas:", error);
+    }
+  }
 
   // Abrir Modal
   btnAbrirModal.addEventListener("click", () => {
@@ -72,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // Envia o token JWT no cabeçalho
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify({
             nome: nomeDisciplina,
@@ -88,22 +114,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           throw new Error(error.message || "Erro ao cadastrar disciplina.");
         }
 
-        const novaDisciplina = await response.json();
-        console.log("Disciplina cadastrada:", novaDisciplina);
+        console.log("Disciplina cadastrada com sucesso!");
 
-        // Atualizar lista de disciplinas no front-end
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <span>${nomeDisciplina}</span> - <em>${statusDisciplina}</em>
-        `;
-        listaDisciplinas.appendChild(li);
+        // Atualizar lista de disciplinas
+        carregarDisciplinas();
 
         // Limpar formulário
-        document.getElementById("nome").value = "";
-        document.getElementById("codigo").value = "";
-        document.getElementById("cargaHoraria").value = "";
-        document.getElementById("descricao").value = "";
-        document.getElementById("status").value = "andamento";
+        formDisciplina.reset();
         modal.style.display = "none";
 
       } catch (error) {
@@ -129,4 +146,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   });
+
+  // Carregar perfil e disciplinas ao iniciar
+  carregarPerfil();
+  carregarDisciplinas();
 });

@@ -1,7 +1,8 @@
 const express = require('express');
-const Disciplinas = require('../models/disciplinas');
- // Importação correta
-const Aluno  = require('../models/aluno');
+const Disciplinas = require('../models/disciplina');
+const Aluno = require('../models/aluno');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY_DISCIPLINA = process.env.JWT_SECRET_DISCIPLINA || 'disciplina_secret_key_abcdef1234567890'; // A chave secreta para as disciplinas
 
 
 const router = express.Router();
@@ -11,24 +12,24 @@ router.post('/cadastrar', async (req, res) => {
   try {
     const { nome, codigo, cargaHoraria, descricao, status, alunoId } = req.body;
 
-    // Verifica se aluno_id foi enviado
-    if (!alunoId) {
-      return res.status(400).json({ error: "O campo aluno_id é obrigatório." });
+    // Verificação dos campos obrigatórios
+    if (!nome || !codigo || !cargaHoraria || !descricao || !alunoId) {
+      return res.status(400).json({ error: "Todos os campos são obrigatórios." });
     }
 
-    // Verifica se o aluno existe no banco
+    // Verifica se o aluno existe
     const alunoExiste = await Aluno.findByPk(alunoId);
     if (!alunoExiste) {
       return res.status(400).json({ error: "Aluno não encontrado." });
     }
 
-    // Cadastrar disciplina
-    const novaDisciplina = await Disciplina.create({
+    // Criação da disciplina
+    const novaDisciplina = await Disciplinas.create({
       nome,
       codigo,
       cargaHoraria,
       descricao,
-      status,
+      status: status || 'andamento', // Se status não for enviado, usa o padrão
       alunoId,
     });
 
@@ -40,20 +41,34 @@ router.post('/cadastrar', async (req, res) => {
 });
 
 
+// Listar disciplinas do aluno logado
+router.get('/disciplinas', async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'Token não fornecido!' });
 
-// Listar disciplinas
-router.get('/listar',  async (req, res) => {
+  const token = authHeader.split(' ')[1]; // Remove o prefixo 'Bearer'
+  if (!token) return res.status(401).json({ error: 'Token inválido ou ausente!' });
+
   try {
-    const disciplinas = await Disciplina.findAll({ where: { aluno_id: req.alunoId } }); // Corrigido: Disciplina.findAll
-    if (disciplinas.length === 0) {
-      return res.status(404).json({ message: 'Nenhuma disciplina encontrada.' });
+    // Usando a chave secreta para a disciplina
+    const decoded = jwt.verify(token, SECRET_KEY_DISCIPLINA); // Verifica o token com a chave secreta para a disciplina
+
+    const aluno = await Aluno.findByPk(decoded.id); // Busca o aluno pelo id do token
+    if (!aluno) return res.status(404).json({ error: 'Aluno não encontrado!' });
+
+    const disciplinas = await aluno.getDisciplinas(); // Método para pegar as disciplinas do aluno
+
+    if (!disciplinas || disciplinas.length === 0) {
+      return res.status(404).json({ error: 'Nenhuma disciplina encontrada para este aluno!' });
     }
-    res.json(disciplinas);
+
+    res.json(disciplinas); // Retorna as disciplinas do aluno
   } catch (error) {
-    console.error('Erro ao buscar disciplinas:', error);
-    res.status(500).json({ error: 'Erro ao buscar disciplinas', detalhes: error.message });
+    console.error(error);
+    res.status(401).json({ error: 'Token inválido ou expirado!' });
   }
 });
+
 
 // Editar disciplina
 router.put('/:id', async (req, res) => {
