@@ -1,5 +1,5 @@
 const express = require('express');
-const Disciplinas = require('../models/disciplinas');
+const Disciplinas = require('../models/disciplina');
  // Importação correta
 const Aluno  = require('../models/aluno');
 
