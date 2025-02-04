@@ -21,3 +21,13 @@ CREATE TABLE disciplinas (
     alunoId INT NOT NULL,
     FOREIGN KEY (alunoId) REFERENCES alunos(id)
 );
+
+CREATE TABLE projetos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    status ENUM('Em andamento', 'Concluído') NOT NULL DEFAULT 'Em andamento',
+    notas TEXT,
+    alunoId INT NOT NULL,
+    FOREIGN KEY (alunoId) REFERENCES alunos(id) ON DELETE CASCADE
+);
