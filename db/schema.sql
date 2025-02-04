@@ -8,7 +8,8 @@ CREATE TABLE alunos (
     matricula VARCHAR(50) NOT NULL UNIQUE,
     dataNascimento DATE NOT NULL,
     curso VARCHAR(255) NOT NULL,
-    senha VARCHAR(255) NOT NULL
+    senha VARCHAR(255) NOT NULL,
+    foto BLOB NOT NULL
 );
 
 CREATE TABLE disciplinas (
