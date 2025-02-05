@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           <img src="${aluno.fotoPerfil || '../assets/default-profile.jpg'}" alt="Foto do Perfil" class="profile-photo">
           <h2>${aluno.nome}</h2>
           <p>Email: ${aluno.email}</p>
-          <p>Telefone: ${aluno.telefone}</p>
           <p>Matrícula: ${aluno.matricula}</p>
           <p>Curso: ${aluno.curso}</p>
           <button id="editar-info">Editar Informações</button>
@@ -64,30 +63,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   
       saveButton.addEventListener('click', async (event) => {
         event.preventDefault();
-  
+      
         const novoNome = nomeInput.value;
         const novoEmail = emailInput.value;
         const novaMatricula = matriculaInput.value;
         const novaSenha = senhaInput.value;
         const novoCurso = cursoInput.value;
         const novaFoto = fotoInput.files[0];
-  
+      
         if (!novoNome || !novoEmail || !novaMatricula || !novaSenha || !novoCurso) {
           alert('Por favor, preencha todos os campos.');
           return;
         }
-  
+      
         const formData = new FormData();
         formData.append('nome', novoNome);
         formData.append('email', novoEmail);
         formData.append('matricula', novaMatricula);
         formData.append('senha', novaSenha);
         formData.append('curso', novoCurso);
-  
+      
         if (novaFoto) {
           formData.append('foto', novaFoto);
         }
-  
+        
         try {
           const editResponse = await fetch('http://localhost:3000/api/alunos/editar', {
             method: 'PUT',
@@ -96,18 +95,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             body: formData,
           });
-  
+      
           if (editResponse.ok) {
             alert('Informações atualizadas com sucesso!');
             modal.style.display = 'none';
-  
+      
             const alunoAtualizado = await editResponse.json();
             userInfoDiv.innerHTML = `
               <div class="user-profile">
                 <img src="${alunoAtualizado.fotoPerfil ? `${alunoAtualizado.fotoPerfil}?t=${Date.now()}` : '../assets/default-profile.jpg'}" alt="Foto do Perfil" class="profile-photo">
                 <h2>${alunoAtualizado.nome}</h2>
                 <p>Email: ${alunoAtualizado.email}</p>
-                <p>Telefone: ${alunoAtualizado.telefone}</p>
                 <p>Matrícula: ${alunoAtualizado.matricula}</p>
                 <p>Curso: ${alunoAtualizado.curso}</p>
                 <button id="editar-info">Editar Informações</button>

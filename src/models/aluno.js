@@ -7,8 +7,6 @@ const Aluno = sequelize.define('Aluno', {
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
   senha: { type: DataTypes.STRING, allowNull: false },
   curso: { type: DataTypes.STRING, allowNull: false },
-}, {
-  timestamps: true,
 });
 
 module.exports = Aluno;

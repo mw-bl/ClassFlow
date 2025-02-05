@@ -5,11 +5,13 @@ const dotenv = require('dotenv');
 const Aluno = require('./models/aluno');
 const Disciplinas = require('./models/disciplina');
 const Projeto = require('./models/projeto');
+const associateModels = require('./models/associations');
 
 const sequelize = require('./config/database');
 
 // Carregar variáveis de ambiente
 dotenv.config();
+associateModels();
 
 const app = express();
 app.use(cors());

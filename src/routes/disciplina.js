@@ -2,7 +2,7 @@ const express = require('express');
 const Disciplinas = require('../models/disciplina');
 const Aluno = require('../models/aluno');
 const jwt = require('jsonwebtoken');
-const SECRET_KEY_DISCIPLINA = process.env.JWT_SECRET_DISCIPLINA || 'disciplina_secret_key_abcdef1234567890'; // A chave secreta para as disciplinas
+const SECRET_KEY = process.env.JWT_SECRET || 'chave_secreta';
 
 
 const router = express.Router();
@@ -11,11 +11,14 @@ const router = express.Router();
 router.post('/cadastrar', async (req, res) => {
   try {
     const { nome, codigo, cargaHoraria, descricao, status, alunoId } = req.body;
-
+    console.log(req.body);
+    console.log("Status recebido no backend:", status);
+    
     // Verificação dos campos obrigatórios
     if (!nome || !codigo || !cargaHoraria || !descricao || !alunoId) {
       return res.status(400).json({ error: "Todos os campos são obrigatórios." });
     }
+    
 
     // Verifica se o aluno existe
     const alunoExiste = await Aluno.findByPk(alunoId);
@@ -29,7 +32,7 @@ router.post('/cadastrar', async (req, res) => {
       codigo,
       cargaHoraria,
       descricao,
-      status: status || 'andamento', // Se status não for enviado, usa o padrão
+      status: status, // Se status não for enviado, usa o padrão
       alunoId,
     });
 
@@ -50,24 +53,27 @@ router.get('/disciplinas', async (req, res) => {
   if (!token) return res.status(401).json({ error: 'Token inválido ou ausente!' });
 
   try {
-    // Usando a chave secreta para a disciplina
-    const decoded = jwt.verify(token, SECRET_KEY_DISCIPLINA); // Verifica o token com a chave secreta para a disciplina
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const aluno = await Aluno.findByPk(decoded.id, {
+      include: {
+        association: 'disciplinas', // Certifique-se de configurar a associação 'disciplinas' no modelo Aluno
+        attributes: { exclude: ['alunoId'] },
+      },
+    });
 
-    const aluno = await Aluno.findByPk(decoded.id); // Busca o aluno pelo id do token
     if (!aluno) return res.status(404).json({ error: 'Aluno não encontrado!' });
 
-    const disciplinas = await aluno.getDisciplinas(); // Método para pegar as disciplinas do aluno
-
-    if (!disciplinas || disciplinas.length === 0) {
+    if (!aluno.disciplinas || aluno.disciplinas.length === 0) {
       return res.status(404).json({ error: 'Nenhuma disciplina encontrada para este aluno!' });
     }
 
-    res.json(disciplinas); // Retorna as disciplinas do aluno
+    res.json(aluno.disciplinas);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao verificar o token:", error);
     res.status(401).json({ error: 'Token inválido ou expirado!' });
   }
 });
+
 
 
 // Editar disciplina
