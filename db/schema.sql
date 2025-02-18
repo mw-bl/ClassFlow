@@ -18,7 +18,7 @@ CREATE TABLE disciplinas (
     codigo VARCHAR(50) NOT NULL UNIQUE,
     cargaHoraria INT NOT NULL,
     descricao TEXT,
-    status ENUM('Pendente', 'Concluída') NOT NULL,
+    status ENUM('Pendente', 'Em andamento', 'Concluída') NOT NULL,
     alunoId INT NOT NULL,
     FOREIGN KEY (alunoId) REFERENCES alunos(id)
 );
