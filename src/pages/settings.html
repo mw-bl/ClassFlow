@@ -19,29 +19,37 @@
       <p>Carregando informações...</p>
     </div>
 
-    <!-- Modal para edição -->
-    <div id="edit-modal">
-        <div class="modal-content">
-          <h2>Editar Perfil</h2>
-          <form id="edit-form" enctype="multipart/form-data">
-            <label for="edit-foto">Foto do Perfil</label>
-            <input id="edit-foto" type="file" accept="image/*">
-            
-            <input id="edit-nome" type="text" placeholder="Nome" required>
-            <input id="edit-email" type="email" placeholder="Email" required>
-            <input id="edit-matricula" type="text" placeholder="Matrícula" required>
-            <input id="edit-senha" type="password" placeholder="Senha" required>
-            <input id="edit-curso" type="text" placeholder="Curso" required>
-      
-            <div class="modal-buttons">
-              <button type="submit" class="save-btn">Salvar</button>
-              <button type="button" class="cancel-btn">Cancelar</button>
-            </div>
-          </form>
-        </div>
+<!-- Modal de Edição -->
+<div id="edit-modal" class="modal">
+  <div class="modal-content">
+    <h2>Editar Informações</h2>
+    <form id="edit-form">
+      <label for="edit-nome">Nome:</label>
+      <input type="text" id="edit-nome" required>
+
+      <label for="edit-email">Email:</label>
+      <input type="email" id="edit-email" required>
+
+      <label for="edit-matricula">Matrícula:</label>
+      <input type="text" id="edit-matricula" required>
+
+      <label for="edit-senha">Senha:</label>
+      <input type="password" id="edit-senha" required>
+
+      <label for="edit-curso">Curso:</label>
+      <input type="text" id="edit-curso" required>
+
+      <!-- Campo para Foto de Perfil -->
+      <label for="edit-foto">Foto de Perfil:</label>
+      <input id="edit-foto" type="file" accept="image/*">
+
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn">Cancelar</button>
+        <button type="submit" class="save-btn">Salvar</button>
       </div>
-      
-      </div>
+    </form>
+  </div>
+</div>
       
   </main>
 </body>

@@ -1,26 +1,31 @@
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+
 const Disciplina = sequelize.define('Disciplina', {
   nome: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   codigo: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   cargaHoraria: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   descricao: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   status: {
-    type: Sequelize.STRING,  // Ou qualquer outro tipo adequado para armazenar o status
+    type: DataTypes.STRING,
     allowNull: false
   },
   alunoId: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false
   }
 });
+
+module.exports = Disciplina;

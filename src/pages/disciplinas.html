@@ -10,7 +10,7 @@
 <body>
   <div id="sidebar-container"></div>
   <header id="main-content">
-    <h1>Carregando...</h1>
+    <h1>Disciplinas</h1>
   </header>
 
   <main>
@@ -24,9 +24,9 @@
             <span class="filtro-texto">Ordenar por:</span>
             <select id="filtro">
               <option value="todos">Todos</option>
-              <option value="andamento">Em andamento</option>
-              <option value="concluida">Concluída</option>
-              <option value="pendente">Pendente</option>
+              <option value="Em Andamento">Em andamento</option>
+              <option value="Concluída">Concluída</option>
+              <option value="Pendente">Pendente</option>
             </select>
           </div>
         </div>
@@ -35,6 +35,7 @@
     </div>
   </main>
 
+  <!-- Modal de Cadastro -->
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -54,13 +55,70 @@
 
         <label for="status">Status:</label>
         <select id="status">
-          <option value="andamento">andamento</option>
-          <option value="concluida">Concluída</option>
-          <option value="pendente">Pendente</option>
+          <option value="Em Andamento">Em Andamento</option>
+          <option value="Concluída">Concluída</option>
+          <option value="Pendente">Pendente</option>
         </select>
 
         <button type="submit">Cadastrar</button>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal de Opções -->
+  <!-- Modal de Opções -->
+<div id="menuModal" class="menu-modal">
+  <button id="btnEditar">Editar</button>
+  <button id="btnExcluir">Excluir</button>
+</div>
+
+<!-- Modal de Edição -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeEditModal">&times;</span>
+    <h2>Editar Disciplina</h2>
+    <form id="formEditDisciplina">
+      <label for="editNome">Nome da Disciplina:</label>
+      <input type="text" id="editNome" required>
+
+      <label for="editCodigo">Código:</label>
+      <input type="text" id="editCodigo" required>
+
+      <label for="editCargaHoraria">Carga Horária:</label>
+      <input type="number" id="editCargaHoraria" required>
+
+      <label for="editDescricao">Descrição:</label>
+      <input type="text" id="editDescricao" required>
+
+      <label for="editStatus">Status:</label>
+      <select id="editStatus">
+        <option value="Em Andamento">Em Andamento</option>
+        <option value="Concluída">Concluída</option>
+        <option value="Pendente">Pendente</option>
+      </select>
+
+      <button type="submit" id="saveChanges">Salvar</button>
+      <button type="button" id="cancelEdit">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+
+  <!-- Modal de Confirmação -->
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <p>Deseja excluir a disciplina?</p>
+      <hr> <!-- Linha horizontal -->
+      <div class="modal-buttons">
+        <button id="confirmDelete">Sim</button>
+        <button id="cancelDelete">Não</button>
+      </div>
+    </div>
+  </div>
+  <div id="customAlert" class="custom-alert">
+    <div class="alert-content">
+      <span id="alertMessage">Disciplina excluída com sucesso!</span>
+      <button id="closeAlert">Fechar</button>
     </div>
   </div>
 

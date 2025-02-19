@@ -98,17 +98,41 @@ router.put('/:id', async (req, res) => {
 });
 
 // Excluir disciplina
-router.delete('/:id',  async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  try {
-    const disciplina = await Disciplina.findOne({ where: { id, aluno_id: req.alunoId } }); // Corrigido: Disciplina.findOne
-    if (!disciplina) return res.status(404).json({ error: 'Disciplina não encontrada!' });
 
+  // Extrair o token do cabeçalho da requisição
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'Token não fornecido!' });
+
+  const token = authHeader.split(' ')[1]; // Remove o prefixo 'Bearer'
+  if (!token) return res.status(401).json({ error: 'Token inválido ou ausente!' });
+
+  try {
+    // Verificar e decodificar o token
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    // Agora que temos o alunoId, podemos usá-lo para buscar a disciplina do aluno
+    const alunoId = decoded.id;
+
+    // Buscar a disciplina pelo id e alunoId
+    const disciplina = await Disciplinas.findOne({
+      where: {
+        id,
+        alunoId // Usando o alunoId decodificado do token
+      }
+    });
+
+    if (!disciplina) return res.status(404).json({ error: 'Disciplina não encontrada ou não pertence ao aluno!' });
+
+    // Excluir a disciplina
     await disciplina.destroy();
     res.json({ message: 'Disciplina excluída com sucesso!' });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Erro ao excluir disciplina', detalhes: error.message });
   }
 });
+
 
 module.exports = router;
