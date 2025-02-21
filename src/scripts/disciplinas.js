@@ -260,60 +260,81 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Excluir disciplina
-  document.getElementById("btnExcluir").addEventListener("click", async () => {
-    // Exibe o modal de confirmação
-    const confirmModal = document.getElementById("confirmModal");
-    confirmModal.style.display = "flex"; // Torna o modal visível
+ // Excluir disciplina
+document.getElementById("btnExcluir").addEventListener("click", async () => {
+  // Exibe o modal de confirmação
+  const confirmModal = document.getElementById("confirmModal");
+  confirmModal.style.display = "flex"; // Torna o modal visível
 
-    function showCustomAlert(message) {
-      const alertBox = document.getElementById("customAlert");
-      const alertMessage = document.getElementById("alertMessage");
-      
-      alertMessage.textContent = message; // Atualiza a mensagem do alerta
-      alertBox.style.display = "flex"; // Exibe o alerta
+  // Esconde o menu de opções quando clicar no botão de excluir
+  menuModal.style.display = "none"; // Isso oculta o menu de opções
+
+  // Função para mostrar o alerta customizado
+  function showCustomAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
     
-      // Fechar o alerta quando clicar no botão de fechar
-      const closeAlertButton = document.getElementById("closeAlert");
-      closeAlertButton.addEventListener("click", () => {
-        alertBox.style.display = "none"; // Fecha o alerta
+    alertMessage.textContent = message; // Atualiza a mensagem do alerta
+    alertBox.style.display = "flex"; // Exibe o alerta
+  
+    // Fechar o alerta quando clicar no botão de fechar
+    const closeAlertButton = document.getElementById("closeAlert");
+    closeAlertButton.addEventListener("click", () => {
+      alertBox.style.display = "none"; // Fecha o alerta
+    });
+  }
+
+  // Ação de exclusão ao confirmar
+  document.getElementById("confirmDelete").addEventListener("click", async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/disciplinas/${disciplinaSelecionada}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!response.ok) throw new Error("Erro ao excluir disciplina.");
+
+      showCustomAlert("Disciplina excluída!");
+      carregarDisciplinas();
+    } catch (error) {
+      console.error("Erro ao excluir disciplina:", error);
     }
 
-    // Ação de exclusão ao confirmar
-    document.getElementById("confirmDelete").addEventListener("click", async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/disciplinas/${disciplinaSelecionada}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) throw new Error("Erro ao excluir disciplina.");
-
-        showCustomAlert("Disciplina excluída!");
-        carregarDisciplinas();
-      } catch (error) {
-        console.error("Erro ao excluir disciplina:", error);
-      }
-
-      // Fecha o modal após a ação
-      confirmModal.style.display = "none";
-    });
-
-    // Fecha o modal se clicar em "Não"
-    document.getElementById("cancelDelete").addEventListener("click", () => {
-      confirmModal.style.display = "none"; // Fecha o modal
-    });
+    // Fecha o modal após a ação
+    confirmModal.style.display = "none";
   });
+
+  // Fecha o modal se clicar em "Não"
+  document.getElementById("cancelDelete").addEventListener("click", () => {
+    confirmModal.style.display = "none"; // Fecha o modal
+  });
+
+  // Fechar o modal se clicar fora dele
+  document.addEventListener("click", (event) => {
+    // Verifica se o clique foi fora do modal
+    if (confirmModal.style.display === "flex" && !confirmModal.contains(event.target) && event.target !== document.getElementById("btnExcluir")) {
+      confirmModal.style.display = "none"; // Fecha o modal se o clique for fora dele
+    }
+  });
+});
+
+
+
 
   // Filtrar disciplinas por status
   filtroStatus.addEventListener("change", () => {
-    const status = filtroStatus.value;
+    const status = filtroStatus.value.toLowerCase(); // Converte o valor do filtro para minúsculas
     const todasDisciplinas = listaDisciplinas.querySelectorAll("li");
-
+  
     todasDisciplinas.forEach((disciplina) => {
-      const statusDisciplina = disciplina.querySelector(".disciplina-status").textContent.trim().toLowerCase();
-      disciplina.style.display = status === "todos" || status === statusDisciplina ? "block" : "none";
+      const statusDisciplina = disciplina.querySelector(".disciplina-status").textContent.trim().toLowerCase(); // Converte o status da disciplina para minúsculas
+  
+      // Verifica se o filtro é "todos" ou se o status da disciplina corresponde ao filtro
+      if (status === "todos" || status === statusDisciplina) {
+        disciplina.style.display = "block"; // Mostra a disciplina
+      } else {
+        disciplina.style.display = "none"; // Oculta a disciplina
+      }
     });
   });
 
