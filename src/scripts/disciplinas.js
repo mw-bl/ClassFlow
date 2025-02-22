@@ -193,21 +193,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     modal.style.display = "none";
   });
 
-  // Ações de editar e excluir
   document.getElementById("btnEditar").addEventListener("click", () => {
+    const editModal = document.getElementById("editModal");
+    editModal.style.display = "flex"; // Torna o modal visível
+
     if (disciplinaSelecionada) {
+      // Encontra a disciplina selecionada na lista de disciplinas
       const disciplina = disciplinas.find(d => d.id === disciplinaSelecionada);
-
-      // Preenche o modal de edição com os dados da disciplina
-      document.getElementById("editNome").value = disciplina.nome;
-      document.getElementById("editCodigo").value = disciplina.codigo;
-      document.getElementById("editCargaHoraria").value = disciplina.cargaHoraria;
-      document.getElementById("editDescricao").value = disciplina.descricao;
-      document.getElementById("editStatus").value = disciplina.status;
-
-      // Exibe o modal de edição
-      editModal.style.display = "block";
+  
+      if (disciplina) {
+        // Preenche o modal de edição com os dados da disciplina
+        document.getElementById("editNome").value = disciplina.nome;
+        document.getElementById("editCodigo").value = disciplina.codigo;
+        document.getElementById("editCargaHoraria").value = disciplina.cargaHoraria;
+        document.getElementById("editDescricao").value = disciplina.descricao;
+        document.getElementById("editStatus").value = disciplina.status;
+  
+        // Exibe o modal de edição
+        editModal.style.display = "block";
+      } else {
+        console.error("Disciplina não encontrada.");
+      }
+    } else {
+      console.error("Nenhuma disciplina selecionada.");
     }
+  
+    // Esconde o menu de opções
     menuModal.style.display = "none";
   });
 
@@ -224,13 +235,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Salvar a edição
   document.getElementById("formEditDisciplina").addEventListener("submit", async (event) => {
     event.preventDefault();
-
+  
     const nome = document.getElementById("editNome").value.trim();
     const codigo = document.getElementById("editCodigo").value.trim();
     const cargaHoraria = document.getElementById("editCargaHoraria").value.trim();
     const descricao = document.getElementById("editDescricao").value.trim();
     const status = document.getElementById("editStatus").value;
-
+  
     try {
       const response = await fetch(`http://localhost:3000/api/disciplinas/${disciplinaSelecionada}`, {
         method: "PUT",
@@ -246,14 +257,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           status,
         }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Erro ao editar disciplina.");
+        const errorData = await response.json();
+        console.error("Erro ao editar disciplina:", errorData);
+        alert(errorData.error || "Erro ao editar disciplina.");
+        return;
       }
-
+  
       alert("Disciplina editada com sucesso!");
       editModal.style.display = "none";
-      carregarDisciplinas();
+      carregarDisciplinas(); // Recarrega a lista de disciplinas após a edição
     } catch (error) {
       console.error("Erro ao editar disciplina:", error);
       alert("Erro ao editar disciplina.");
@@ -317,9 +331,6 @@ document.getElementById("btnExcluir").addEventListener("click", async () => {
     }
   });
 });
-
-
-
 
   // Filtrar disciplinas por status
   filtroStatus.addEventListener("change", () => {

@@ -77,23 +77,49 @@ router.get('/disciplinas', async (req, res) => {
 
 
 // Editar disciplina
+// Editar disciplina
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, codigo, cargaHoraria, descricao, status } = req.body;
-  try {
-    const disciplina = await Disciplina.findOne({ where: { id, aluno_id: req.alunoId } }); // Corrigido: Disciplina.findOne
-    if (!disciplina) return res.status(404).json({ error: 'Disciplina não encontrada!' });
 
-    disciplina.nome = nome;
-    disciplina.codigo = codigo;
-    disciplina.cargaHoraria = cargaHoraria;
-    disciplina.descricao = descricao;
-    disciplina.status = status;
+  // Verifica se o token foi fornecido
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'Token não fornecido!' });
+
+  const token = authHeader.split(' ')[1]; // Remove o prefixo 'Bearer'
+  if (!token) return res.status(401).json({ error: 'Token inválido ou ausente!' });
+
+  try {
+    // Verifica e decodifica o token
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const alunoId = decoded.id;
+
+    // Busca a disciplina pelo ID e pelo alunoId
+    const disciplina = await Disciplinas.findOne({
+      where: {
+        id,
+        alunoId, // Garante que a disciplina pertence ao aluno logado
+      },
+    });
+
+    if (!disciplina) {
+      return res.status(404).json({ error: 'Disciplina não encontrada ou não pertence ao aluno!' });
+    }
+
+    // Atualiza os campos da disciplina
+    disciplina.nome = nome || disciplina.nome;
+    disciplina.codigo = codigo || disciplina.codigo;
+    disciplina.cargaHoraria = cargaHoraria || disciplina.cargaHoraria;
+    disciplina.descricao = descricao || disciplina.descricao;
+    disciplina.status = status || disciplina.status;
+
+    // Salva as alterações no banco de dados
     await disciplina.save();
 
     res.json({ message: 'Disciplina atualizada com sucesso!', disciplina });
   } catch (error) {
-    res.status(400).json({ error: 'Erro ao atualizar disciplina', detalhes: error.message });
+    console.error("Erro ao atualizar disciplina:", error);
+    res.status(500).json({ error: 'Erro ao atualizar disciplina', detalhes: error.message });
   }
 });
 
